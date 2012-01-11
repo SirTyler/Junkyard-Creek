@@ -1,0 +1,25 @@
+name: JunkyardCreek
+main: me.sirtyler.JunkyardCreek.JunkyardCreek
+version: 1.0
+description: >
+             Junkyard Creek-Waste Dumping has never been so good!
+depend: [Vault]
+commands:
+  junk:
+    description: All Junkyard commands
+    usage: /junk help - Display Help
+  jc:
+    description: Shot Version
+    usage: /jc help - Display Help
+permissions:
+    junkyardcreek.*:
+        description: Gives total JunkyardCreek Access
+        children:
+            junkyardcreek.test: true
+            junkyardcreek.access: true
+    junkyardcreek.test:
+        description: Allows for Test Command.
+        default: true
+    junkyardcreek.access:
+        description: Allows for Access to JunkyardCreek Fishing.
+        default: true
