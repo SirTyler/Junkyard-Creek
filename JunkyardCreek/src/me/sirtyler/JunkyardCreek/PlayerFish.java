@@ -37,8 +37,15 @@ public class PlayerFish extends PlayerListener{
 				String[] items = con.split(",");
 				int max = items.length;
 				int pickedNumber = rand.nextInt(max);
-				itemNum = Integer.parseInt(items[pickedNumber]);
-				item = new ItemStack(itemNum, 1);
+				if(items[pickedNumber].contains(">")) {
+					String[] test = items[pickedNumber].split(">");
+					itemNum = Integer.parseInt(test[0]);
+					item = new ItemStack(itemNum, 1);
+					item.setDurability(Short.valueOf(test[1]));
+				} else {
+					itemNum = Integer.parseInt(items[pickedNumber]);
+					item = new ItemStack(itemNum, 1);
+				}
 				itemName = item.getType().name();
 				} catch (Exception e) {
 					Exception p = new Exception("Could not understand Config");
