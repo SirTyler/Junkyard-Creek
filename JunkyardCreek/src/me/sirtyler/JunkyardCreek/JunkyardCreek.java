@@ -1,21 +1,18 @@
 package me.sirtyler.JunkyardCreek;
 
-import java.util.logging.Logger;
+import java.io.File;
 
 import net.milkbowl.vault.permission.Permission;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class JunkyardCreek extends JavaPlugin{
 	public static JunkyardCreek plugin;
-	private FileConfiguration config;
-	public final Logger logger = Logger.getLogger("Minecraft");
-	private final PlayerFish interact = new PlayerFish(this);
+	public FileConfiguration config;
 	public CommandEx myExecutor;
 	public Permission permission = null;
 	
@@ -25,28 +22,33 @@ public class JunkyardCreek extends JavaPlugin{
 
 	@Override
 	public void onDisable() {
-		PluginDescriptionFile pdfFile = this.getDescription();
-		this.logger.info("[" + pdfFile.getName() + "]" + " version-" + pdfFile.getVersion() + " is now Disabled.");	
+		//Disabled
 	}
 
 	@Override
 	public void onEnable() {
 		myExecutor = new CommandEx(this);
-		PluginManager pm = getServer().getPluginManager();
 		PluginDescriptionFile pdfFile = this.getDescription();
+		this.getLogger().info(pdfFile.getDescription());
+		this.getLogger().info("By " + pdfFile.getAuthors());
 		setupPermissions();
-		pm.registerEvent(Event.Type.PLAYER_FISH, this.interact, Event.Priority.Highest, this);
+		this.getLogger().info("=====Permission Plugged into " + permission.getName() + "======");
 		getCommand("junk").setExecutor(myExecutor);
 		getCommand("jc").setExecutor(myExecutor);
 		checkConfig();
-		this.logger.info("[" + pdfFile.getName() + "]" + " version-" + pdfFile.getVersion() + " is now Enabled.");	
+		this.getLogger().info("================Config Loaded================");
+		Bukkit.getPluginManager().registerEvents(new FishListener(this), this);
 	}
 	
 	private void checkConfig() {
+		String mainDirectory = ("plugins/" + this.getDescription().getName());
+		File file = new File(mainDirectory + File.separator + "config.yml");
 		try{
 			config = this.getConfig();
-			config.options().copyDefaults(true);
-			this.saveConfig();
+			if(!file.exists()) { 
+				config.options().copyDefaults(true);
+				this.saveConfig();
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}

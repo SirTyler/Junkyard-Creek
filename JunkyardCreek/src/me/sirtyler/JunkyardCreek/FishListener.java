@@ -7,26 +7,33 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.event.player.PlayerListener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-public class PlayerFish extends PlayerListener{
+public class FishListener implements Listener{
 	private static JunkyardCreek plugin;
 	private FileConfiguration config;
 	public Permission perm = null;
 	Random rand = new Random();
-	public PlayerFish(JunkyardCreek instance) {
+	
+	public FishListener(JunkyardCreek instance) {
 		plugin = instance;
 	}
+	
+	@EventHandler
 	public void onPlayerFish(PlayerFishEvent event) {
 		Player player = event.getPlayer();
 		String state = event.getState().name();
-		config = plugin.getConfig();
+		config = plugin.config;
 		perm = plugin.permission;
+		boolean spawnMob = false;
+		String mob = null;
 		if(state.equalsIgnoreCase("CAUGHT_FISH")) {
 			int itemNum = 349;
 			ItemStack item = new ItemStack(itemNum,1);
@@ -34,7 +41,20 @@ public class PlayerFish extends PlayerListener{
 			if(config.contains("Junk.Items")) {
 				try{
 				String con = config.get("Junk.Items").toString();
+				String start = con.split(",")[0].split("\\[")[1];
+				String end = con.split(",")[con.split(",").length-1].split("\\]")[0];
 				String[] items = con.split(",");
+				for(int i = 0; i< items.length; i++) {
+					if(i == 0) {
+						items[0] = start;
+						items[i].replace(" ", "");
+					}
+					if(i == items.length - 1) {
+						items[i] = end;
+						items[i].replace(" ", "");
+					}
+					items[i].replace(" ", "");
+				}
 				int max = items.length;
 				int pickedNumber = rand.nextInt(max);
 				if(items[pickedNumber].contains(">")) {
@@ -42,6 +62,10 @@ public class PlayerFish extends PlayerListener{
 					itemNum = Integer.parseInt(test[0]);
 					item = new ItemStack(itemNum, 1);
 					item.setDurability(Short.valueOf(test[1]));
+				} else if (items[pickedNumber].contains("@")) {
+					String[] test = items[pickedNumber].split("@");
+					mob = test[1];
+					spawnMob = true;
 				} else {
 					itemNum = Integer.parseInt(items[pickedNumber]);
 					item = new ItemStack(itemNum, 1);
@@ -51,11 +75,23 @@ public class PlayerFish extends PlayerListener{
 					Exception p = new Exception("Could not understand Config");
 					e.printStackTrace();
 					p.printStackTrace();
+					return;
 				}
 				event.setCancelled(true);
 				Location oLoc = event.getCaught().getLocation();
 				Location pLoc = player.getLocation();
-				Entity ent = player.getWorld().dropItem(oLoc, item);
+				Entity ent = null;
+				if(spawnMob == true) {
+					try {
+						ent = player.getWorld().spawnCreature(oLoc, CreatureType.valueOf(mob));
+						itemName = mob.toLowerCase();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				} else {
+					player.getWorld().dropItem(oLoc, item);
+				}
+				
 				//Velocity from Minecraft Source + MCP Decompiler. Thank you Notch and MCP :3
 				double d1 = pLoc.getX() - oLoc.getX();
 				double d3 = pLoc.getY() - oLoc.getY();

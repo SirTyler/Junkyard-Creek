@@ -1,9 +1,10 @@
 name: JunkyardCreek
 main: me.sirtyler.JunkyardCreek.JunkyardCreek
-version: 1.1
+version: 1.2
 description: >
              Junkyard Creek-Waste Dumping has never been so good!
 depend: [Vault]
+author: SirTyler
 commands:
   junk:
     description: All Junkyard commands
