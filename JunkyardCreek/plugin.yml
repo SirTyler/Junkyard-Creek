@@ -17,10 +17,10 @@ permissions:
         description: Gives total JunkyardCreek Access
         children:
             junkyardcreek.test: true
-            junkyardcreek.access: true
+            junkyardcreek.fish: true
     junkyardcreek.test:
         description: Allows for Test Command.
         default: true
-    junkyardcreek.access:
+    junkyardcreek.fish:
         description: Allows for Access to JunkyardCreek Fishing.
         default: true

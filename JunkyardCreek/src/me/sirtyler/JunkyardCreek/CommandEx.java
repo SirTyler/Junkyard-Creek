@@ -31,7 +31,7 @@ public class CommandEx implements CommandExecutor{
 					player.sendMessage(ChatColor.GREEN + "/junk test - Check if JunkyardCreek is working.");
 					return true;
                 } else if(cmd.equalsIgnoreCase("test")){
-                	if(perm.playerHas(player, "vaultslots.test")) {
+                	if(perm.playerHas(player, "junkyardcreek.test")) {
                 		sender.sendMessage(ChatColor.GOLD + "[JunkyardCreek] is Working!");
                 		return true;
                 	}else {
