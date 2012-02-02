@@ -2,6 +2,7 @@ package me.sirtyler.JunkyardCreek;
 
 import java.util.Random;
 
+import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.ChatColor;
@@ -20,6 +21,7 @@ public class FishListener implements Listener {
 	private static JunkyardCreek plugin;
 	private FileConfiguration config;
 	public Permission perm = null;
+	public Economy eco = null;
 	Random rand = new Random();
 
 	public FishListener(JunkyardCreek instance) {
@@ -32,8 +34,11 @@ public class FishListener implements Listener {
 		String state = event.getState().name();
 		config = plugin.config;
 		perm = plugin.permission;
+		eco = plugin.economy;
 		boolean spawnMob = false;
+		boolean useMoney = false;
 		String mob = null;
+		String money = null;
 		if (perm.playerHas(player, "junkyardcreek.fish")) {
 			if (state.equalsIgnoreCase("CAUGHT_FISH")) {
 				int itemNum = 349;
@@ -65,9 +70,11 @@ public class FishListener implements Listener {
 							item = new ItemStack(itemNum, 1);
 							item.setDurability(Short.valueOf(test[1]));
 						} else if (items[pickedNumber].contains("@")) {
-							String[] test = items[pickedNumber].split("@");
-							mob = test[1];
+							mob = items[pickedNumber].split("@")[1];
 							spawnMob = true;
+						} else if(items[pickedNumber].contains("$")) {
+							money = items[pickedNumber].split("$")[1];
+							useMoney = true;
 						} else {
 							itemNum = Integer.parseInt(items[pickedNumber]);
 							item = new ItemStack(itemNum, 1);
@@ -92,6 +99,9 @@ public class FishListener implements Listener {
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
+					} 
+					if (useMoney == true) {
+						eco.depositPlayer(player.getName(), Double.parseDouble(money));
 					} else {
 						player.getWorld().dropItem(oLoc, item);
 					}

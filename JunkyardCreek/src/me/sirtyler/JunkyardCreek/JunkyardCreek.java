@@ -2,6 +2,7 @@ package me.sirtyler.JunkyardCreek;
 
 import java.io.File;
 
+import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
@@ -15,6 +16,7 @@ public class JunkyardCreek extends JavaPlugin{
 	public FileConfiguration config;
 	public CommandEx myExecutor;
 	public Permission permission = null;
+	public Economy economy = null;
 	
 	public JunkyardCreek() {
 		super();
@@ -33,6 +35,8 @@ public class JunkyardCreek extends JavaPlugin{
 		this.getLogger().info("By " + pdfFile.getAuthors());
 		setupPermissions();
 		this.getLogger().info("=====Permission Plugged into " + permission.getName() + "======");
+		setupEconomy();
+		this.getLogger().info("=====Economy Plugged into " + economy.getName() + "======");
 		getCommand("junk").setExecutor(myExecutor);
 		getCommand("jc").setExecutor(myExecutor);
 		checkConfig();
@@ -60,6 +64,14 @@ public class JunkyardCreek extends JavaPlugin{
             permission = permissionProvider.getProvider();
         }
         return (permission != null);
+    }
+    
+    private Boolean setupEconomy(){
+        RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+        if (economyProvider != null) {
+            economy = economyProvider.getProvider();
+        }
+        return (economy != null);
     }
 
 }
