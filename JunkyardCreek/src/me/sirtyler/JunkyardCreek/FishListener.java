@@ -99,11 +99,10 @@ public class FishListener implements Listener {
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
-					} 
-					if (useMoney == true) {
+					} else if (useMoney == true) {
 						eco.depositPlayer(player.getName(), Double.parseDouble(money));
 					} else {
-						player.getWorld().dropItem(oLoc, item);
+						ent = player.getWorld().dropItem(oLoc, item);
 					}
 
 					// Velocity from Minecraft Source + MCP Decompiler. Thank
