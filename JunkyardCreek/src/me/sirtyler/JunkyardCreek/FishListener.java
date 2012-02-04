@@ -72,8 +72,8 @@ public class FishListener implements Listener {
 						} else if (items[pickedNumber].contains("@")) {
 							mob = items[pickedNumber].split("@")[1];
 							spawnMob = true;
-						} else if(items[pickedNumber].contains("$")) {
-							money = items[pickedNumber].split("$")[1];
+						} else if(items[pickedNumber].contains("\\$")) {
+							money = items[pickedNumber].split("\\$")[1];
 							useMoney = true;
 						} else {
 							itemNum = Integer.parseInt(items[pickedNumber]);
@@ -121,7 +121,7 @@ public class FishListener implements Listener {
 					ent.setVelocity(new Vector(motionX, motionY, motionZ));
 					player.sendMessage(ChatColor.GOLD + "You got a " + itemName);
 				} else {
-
+					player.sendMessage(ChatColor.RED + "Error! Config mishap let Admin know");
 				}
 			} else if (state.equalsIgnoreCase("FAILED_ATTEMPT")) {
 				player.sendMessage(ChatColor.GRAY

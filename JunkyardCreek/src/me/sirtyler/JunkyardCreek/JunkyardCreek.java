@@ -7,7 +7,6 @@ import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -30,9 +29,6 @@ public class JunkyardCreek extends JavaPlugin{
 	@Override
 	public void onEnable() {
 		myExecutor = new CommandEx(this);
-		PluginDescriptionFile pdfFile = this.getDescription();
-		this.getLogger().info(pdfFile.getDescription());
-		this.getLogger().info("By " + pdfFile.getAuthors());
 		setupPermissions();
 		this.getLogger().info("=====Permission Plugged into " + permission.getName() + "======");
 		setupEconomy();
