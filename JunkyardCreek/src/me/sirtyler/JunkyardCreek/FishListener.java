@@ -1,6 +1,7 @@
 package me.sirtyler.JunkyardCreek;
 
 import java.util.Random;
+import java.util.logging.Level;
 
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -40,6 +41,12 @@ public class FishListener implements Listener {
 		String mob = null;
 		String money = null;
 		if (perm.playerHas(player, "junkyardcreek.fish")) {
+			if(!player.hasPermission("junkyardcreek.region.bypass")) {
+				if(plugin.rm.getRegion(player.getLocation()) == null && state.equalsIgnoreCase("CAUGHT_FISH")) {
+					player.sendMessage("Not in a Junkyard Creek Fishing Region");
+					return;
+				}
+			}
 			if (state.equalsIgnoreCase("CAUGHT_FISH")) {
 				int itemNum = 349;
 				ItemStack item = new ItemStack(itemNum, 1);
@@ -72,19 +79,24 @@ public class FishListener implements Listener {
 						} else if (items[pickedNumber].contains("@")) {
 							mob = items[pickedNumber].split("@")[1];
 							spawnMob = true;
-						} else if(items[pickedNumber].contains("\\$")) {
+						} else if(items[pickedNumber].contains("$")) {
 							money = items[pickedNumber].split("\\$")[1];
 							useMoney = true;
 						} else {
-							itemNum = Integer.parseInt(items[pickedNumber]);
-							item = new ItemStack(itemNum, 1);
+							if(eco != null) {
+								itemNum = Integer.parseInt(items[pickedNumber]);
+								item = new ItemStack(itemNum, 1);
+							} else {
+								plugin.getLogger().log(Level.WARNING, "Economy Not Enabled");
+								return;
+							}
 						}
 						itemName = item.getType().name();
 					} catch (Exception e) {
 						Exception p = new Exception(
 								"Could not understand Config");
-						e.printStackTrace();
 						p.printStackTrace();
+						e.printStackTrace();
 						return;
 					}
 					event.setCancelled(true);
@@ -101,6 +113,7 @@ public class FishListener implements Listener {
 						}
 					} else if (useMoney == true) {
 						eco.depositPlayer(player.getName(), Double.parseDouble(money));
+						itemName = ("$" + money.toString() + " bill!");
 					} else {
 						ent = player.getWorld().dropItem(oLoc, item);
 					}
@@ -117,7 +130,9 @@ public class FishListener implements Listener {
 					double motionY = d3 * d9 + (double) ((float) Math.sqrt(d7))
 							* 0.080000000000000002D;
 					double motionZ = d5 * d9;
-					ent.setVelocity(new Vector(motionX, motionY, motionZ));
+					if(useMoney == false) {
+						ent.setVelocity(new Vector(motionX, motionY, motionZ));
+					}
 					player.sendMessage(ChatColor.GOLD + "You got a " + itemName);
 				} else {
 					player.sendMessage(ChatColor.RED + "Error! Config mishap let Admin know");

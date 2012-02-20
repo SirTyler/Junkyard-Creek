@@ -1,5 +1,7 @@
 package me.sirtyler.JunkyardCreek;
 
+import java.util.logging.Level;
+
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.ChatColor;
@@ -7,6 +9,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import com.sk89q.worldedit.IncompleteRegionException;
+import com.sk89q.worldedit.bukkit.selections.Selection;
+import com.sk89q.worldedit.regions.Region;
 
 public class CommandEx implements CommandExecutor{
 	private JunkyardCreek plugin;
@@ -29,6 +35,7 @@ public class CommandEx implements CommandExecutor{
 					player.sendMessage(ChatColor.GREEN + "/junk or /jc");
 					player.sendMessage(ChatColor.GREEN + "/junk help - Displays this and other help pages.");
 					player.sendMessage(ChatColor.GREEN + "/junk test - Check if JunkyardCreek is working.");
+					player.sendMessage(ChatColor.GREEN + "/junk set - Add Selected Region to Region List.");
 					return true;
                 } else if(cmd.equalsIgnoreCase("test")){
                 	if(perm.playerHas(player, "junkyardcreek.test")) {
@@ -38,6 +45,23 @@ public class CommandEx implements CommandExecutor{
             			sender.sendMessage(ChatColor.RED + "[JunkyardCreek]: You Do Not Have Permission for That.");
             			return true;
             		}
+                } else if(cmd.equalsIgnoreCase("set")) {
+                	if(plugin.WorldEdit != null) {
+                		Selection sec = plugin.WorldEdit.getSelection(player);
+                		try {
+							Region reg = plugin.rm.addRegion(sec.getRegionSelector().getRegion());
+	                		player.sendMessage(ChatColor.GOLD + "Region Added");
+	                		plugin.getLogger().log(Level.FINE, (player.getName() + " made fishing region at " + reg.toString()));
+						} catch (IncompleteRegionException e) {
+							player.sendMessage(ChatColor.RED + "Error: Let Server Admin know.");
+							plugin.getLogger().log(Level.WARNING, "Region Creation Error!");
+							e.printStackTrace();
+						}
+                		return true;
+                	} else {
+                		player.sendMessage(ChatColor.RED + "WorldEdit is not running");
+                		return true;
+                	}
                 }
 			}
 		}

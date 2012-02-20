@@ -1,4 +1,4 @@
 # default config.yml
 Junk: 
      Items: 
-       - '349,349,349,349,349,349,@SQUID'
+       - '349,349,349,349,349,349,@SQUID,$40'

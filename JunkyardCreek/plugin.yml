@@ -1,9 +1,10 @@
 name: JunkyardCreek
 main: me.sirtyler.JunkyardCreek.JunkyardCreek
-version: 1.3-DEV
+version: 1.3
 description: >
              Junkyard Creek-Waste Dumping has never been so good!
 depend: [Vault]
+softdepend: [WorldEdit]
 author: SirTyler
 commands:
   junk:
@@ -18,9 +19,20 @@ permissions:
         children:
             junkyardcreek.test: true
             junkyardcreek.fish: true
+    junkyardcreek.region.*:
+        description: Gives total Region Access
+        children:
+            junkyardcreek.region.set: true
+            junkyardcreek.region.bypass: true
     junkyardcreek.test:
         description: Allows for Test Command.
         default: true
     junkyardcreek.fish:
         description: Allows for Access to JunkyardCreek Fishing.
         default: true
+    junkyardcreek.region.set:
+        description: Allows for Setting a Fishing Region.
+        default: op
+    junkyardcreek.region.bypass:
+        description: Allows for Region Bypass.
+        default: op
