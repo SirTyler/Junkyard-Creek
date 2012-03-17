@@ -9,7 +9,7 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.CreatureType;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -106,7 +106,7 @@ public class FishListener implements Listener {
 					if (spawnMob == true) {
 						try {
 							ent = player.getWorld().spawnCreature(oLoc,
-									CreatureType.valueOf(mob));
+									EntityType.valueOf(mob));
 							itemName = mob.toLowerCase();
 						} catch (Exception e) {
 							e.printStackTrace();
