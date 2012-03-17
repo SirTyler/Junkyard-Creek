@@ -99,9 +99,9 @@ public class FishListener implements Listener {
 						e.printStackTrace();
 						return;
 					}
-					event.setCancelled(true);
-					Location oLoc = event.getCaught().getLocation();
+					Location oLoc = event.getCaught().getLocation().add(0, 1, 0);
 					Location pLoc = player.getLocation();
+					event.getCaught().remove();
 					Entity ent = null;
 					if (spawnMob == true) {
 						try {
@@ -114,9 +114,7 @@ public class FishListener implements Listener {
 					} else if (useMoney == true) {
 						eco.depositPlayer(player.getName(), Double.parseDouble(money));
 						itemName = ("$" + money.toString() + " bill!");
-					} else {
-						ent = player.getWorld().dropItem(oLoc, item);
-					}
+					} else ent = player.getWorld().dropItem(oLoc, item);
 
 					// Velocity from Minecraft Source + MCP Decompiler. Thank
 					// you Notch and MCP :3
@@ -130,9 +128,7 @@ public class FishListener implements Listener {
 					double motionY = d3 * d9 + (double) ((float) Math.sqrt(d7))
 							* 0.080000000000000002D;
 					double motionZ = d5 * d9;
-					if(useMoney == false) {
-						ent.setVelocity(new Vector(motionX, motionY, motionZ));
-					}
+					if(useMoney == false) ent.setVelocity(new Vector(motionX, motionY, motionZ));
 					player.sendMessage(ChatColor.GOLD + "You got a " + itemName);
 				} else {
 					player.sendMessage(ChatColor.RED + "Error! Config mishap let Admin know");

@@ -17,6 +17,7 @@ public class JunkyardCreek extends JavaPlugin{
 	public static JunkyardCreek plugin;
 	public FileConfiguration config;
 	public CommandEx myExecutor;
+	public CommandExWG myExecutorWG;
 	public Permission permission = null;
 	public Economy economy = null;
 	public WorldEditPlugin WorldEdit;
@@ -42,16 +43,18 @@ public class JunkyardCreek extends JavaPlugin{
 		setupEconomy();
 		if(economy != null) this.getLogger().log(Level.INFO, "=====Economy Plugged into " + economy.getName() + "==========");
 		getCommand("junk").setExecutor(myExecutor);
-		getCommand("jc").setExecutor(myExecutor);
 		checkConfig();
 		this.getLogger().log(Level.INFO, "=====Config Loaded===========================");
-		if(Bukkit.getPluginManager().isPluginEnabled("WorldEdit")) {
+		Bukkit.getPluginManager().registerEvents(new FishListener(this), this);
+		if(Bukkit.getPluginManager().getPlugin("WorldEdit") != null) {
+			myExecutorWG = new CommandExWG(this);
 			WorldEdit = (WorldEditPlugin) Bukkit.getPluginManager().getPlugin("WorldEdit");
 			buildFile();
 			rm = new RegionManager(this);
 			this.getLogger().log(Level.INFO, "=====Plugged into WorldEdit==================");
-		}
-		Bukkit.getPluginManager().registerEvents(new FishListener(this), this);
+			getCommand("junkyard").setExecutor(myExecutorWG);
+		} else getCommand("junkyard").setExecutor(myExecutor);
+		new VersionChecker(this,"http://dev.bukkit.org/server-mods/junkyardcreek/files.rss");
 	}
 	
 	private void checkConfig() {

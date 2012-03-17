@@ -7,12 +7,10 @@ depend: [Vault]
 softdepend: [WorldEdit]
 author: SirTyler
 commands:
-  junk:
+  junkyard:
     description: All Junkyard commands
     usage: /junk help - Display Help
-  jc:
-    description: Shot Version
-    usage: /jc help - Display Help
+    aliases: [junk, jc]
 permissions:
     junkyardcreek.*:
         description: Gives total JunkyardCreek Access
