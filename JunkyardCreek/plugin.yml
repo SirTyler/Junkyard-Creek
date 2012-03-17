@@ -1,6 +1,6 @@
 name: JunkyardCreek
 main: me.sirtyler.JunkyardCreek.JunkyardCreek
-version: 1.3
+version: 1.4
 description: >
              Junkyard Creek-Waste Dumping has never been so good!
 depend: [Vault]
